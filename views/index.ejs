@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css" />
+    <script src="/javascripts/jquery-1.12.3.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head>
+<body>
+    <div class="container-fluid">
+        <h1 class="center-block text-center">Welcome in the Personal Cloud Vault install wizzard !</h1>
+        <form method="post">
+            <div class="form-group">
+                <h2>Raspberry Pi access settings</h2>
+                <label for="rootpassword">Raspberry Pi root account password</label>
+                <input type="password" class="form-control" id="rootpassword" name="rootpassword" placeholder="Choose root password">
+                <label for="rootpasswordConfirm">Confirm password</label>
+                <input type="password" class="form-control" id="rootpasswordConfirm" name="rootpasswordConfirm" placeholder="Confirm password">
+                <small class="text-muted">This is the password to access directly to your Pi device using the "pi" username, it is very important, please choose a strong password</small>
+            </div>
+            <fieldset class="form-group">
+                <h2>Personal Cloud Vault access settings</h2>
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+
+                <label for="passwordConfirm">Confirm password</label>
+                <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm password">
+
+                <hr/>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox disabled">
+                            <label>
+                                <input type="checkbox" name="internetAccess" disabled /> Allow external internet access (coming soon !)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <button type="submit" class="btn btn-primary">Next</button>
+        </form>
+    </div>
+</body>
+</html>

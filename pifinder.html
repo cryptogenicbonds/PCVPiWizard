@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pi finder</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</head>
+<body>
+    <div id="result">Searching Pi...</div>
+    <script>
+        var tocheck = 255;
+        var find = false;
+        for(var i=0; i<=255; ++i) {
+            $.get("http://192.168.0."+i+":4242/picheck?ip=192.168.0."+i, function (data) {
+                if (data.substr(0, 2) == "ok") {
+                    $('#result').html('Your Pi address is: '+data.substr(2)+', the Personal Cloud Vault can be access there: <a href="'+data.substr(2)+':4242">'+data.substr(2)+':4242</a>');
+                    i+=255;
+                    find = true;
+                }
+                --tocheck;
+            });
+        }
+
+        setInterval(function(){
+            if(tocheck <= 0 && !find)
+                    $('#result').html('Could not find your pi, please check that you are on the same router');
+        }, 500);
+    </script>
+</body>
+</html>

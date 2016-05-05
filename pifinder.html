@@ -11,7 +11,7 @@
         var tocheck = 255;
         var find = false;
         for(var i=0; i<=255; ++i) {
-            $.get("http://192.168.0."+i+":4242/picheck?ip=192.168.0."+i, function (data) {
+            $.get("http://192.168.0."+i+":4242/picheck?ip="+encodeURIComponent("192.168.0."+i), function (data) {
                 if (data.substr(0, 2) == "ok") {
                     $('#result').html('Your Pi address is: '+data.substr(2)+', the Personal Cloud Vault can be access there: <a href="'+data.substr(2)+':4242">'+data.substr(2)+':4242</a>');
                     i+=255;
@@ -21,8 +21,21 @@
             });
         }
 
+        var tocheck2 = 255;
+
+        for(var i=0; i<=255; ++i) {
+            $.get("http://192.168.1."+i+":4242/picheck?ip="+encodeURIComponent("192.168.1."+i), function (data) {
+                if (data.substr(0, 2) == "ok") {
+                    $('#result').html('Your Pi address is: '+data.substr(2)+', the Personal Cloud Vault can be access there: <a href="'+data.substr(2)+':4242">'+data.substr(2)+':4242</a>');
+                    i+=255;
+                    find = true;
+                }
+                --tocheck2;
+            });
+        }
+
         setInterval(function(){
-            if(tocheck <= 0 && !find)
+            if(tocheck <= 0 && tocheck2 <= 0 && !find)
                     $('#result').html('Could not find your pi, please check that you are on the same router');
         }, 500);
     </script>

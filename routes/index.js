@@ -9,7 +9,7 @@ var extract = require('extract-zip');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  var state = require('../state.json');
+  var state = require('./state.json');
 
   if(state.state == 'initial')
     res.render('index');
@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res){
-  var state = require('../state.json');
+  var state = require('./state.json');
   var showIndex = true;
   if(state.state == 'initial') {
     if (req.body.rootpassword != ""
@@ -32,7 +32,7 @@ router.post('/', function(req, res){
 
         state.state = 'clone';
 
-        fs.writeFile('../state.json', JSON.stringify(state), {flag: 'w'}, function (err) {
+        fs.writeFile('./state.json', JSON.stringify(state), {flag: 'w'}, function (err) {
           if (err) return console.log(err);
         });
 
@@ -43,12 +43,12 @@ router.post('/', function(req, res){
         var daemonPath = os.homedir() + '/CryptoBullion-CBX';
         var walletPath = os.homedir() + '/PersonalCloudVault';
 
-        child_process.exec("git clone https://github.com/cryptogenicbonds/CryptoBullion-CBX.git "+daemonPath, function (error, stdout, stderr) {
+        child_process.exec("cd "+daemonPath+" && git pull", function (error, stdout, stderr) {
           console.log(error);
           console.log(stdout);
           console.log(stderr);
 
-          child_process.exec("git clone https://github.com/cryptogenicbonds/PersonalCloudVault.git "+walletPath+" && cd "+walletPath+" && npm update", function (error, stdout, stderr) {
+          child_process.exec("cd "+walletPath+" && git pull && npm update", function (error, stdout, stderr) {
             console.log(error);
             console.log(stdout);
             console.log(stderr);
@@ -94,7 +94,7 @@ router.post('/', function(req, res){
 
               fs.writeFile(os.homedir()+"/.CryptoBullion/CryptoBullion.conf", cryptoBullionConf, {flag: 'w'}, function (err) {
                 state.state = 'bootstrap';
-                fs.writeFile('../state.json', JSON.stringify(state), {flag: 'w'}, function (err) {
+                fs.writeFile('./state.json', JSON.stringify(state), {flag: 'w'}, function (err) {
                   if (err) return console.log(err);
                 });
 
@@ -115,7 +115,7 @@ router.post('/', function(req, res){
                     extract("bootstrap.zip", {dir: os.homedir()+"/.CryptoBullion"}, function (err) {
                       child_process.exec("sudo mv "+walletPath+"/startup.sh "+os.homedir()+"/startup.sh && sudo chmod +x "+os.homedir()+"/startup.sh", function (error, stdout, stderr) {
                         state.state = 'done';
-                        fs.writeFile('../state.json', JSON.stringify(state), {flag: 'w'}, function (err) {
+                        fs.writeFile('./state.json', JSON.stringify(state), {flag: 'w'}, function (err) {
                           if (err) return console.log(err);
                         });
 

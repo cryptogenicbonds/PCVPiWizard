@@ -38,6 +38,7 @@ router.post('/', function(req, res){
         });
 
         var rootpassword = req.body.rootpassword.replace('"', '\\"');
+        rootpassword = rootpassword.replace(' ', '\\ ');
 
         child_process.exec('echo "pi:'+rootpassword+'" | sudo chpasswd', function (error, stdout, stderr) {});
 

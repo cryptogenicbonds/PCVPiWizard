@@ -6,10 +6,11 @@ var child_process = require('child_process');
 var randomstring = require("randomstring");
 var http = require('http');
 var extract = require('extract-zip');
+var statePath = os.homedir() + '/PCVPiWizard/state.json';
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  var state = require('../state.json');
+  var state = require(statePath);
 
   if(state.state == 'initial')
     res.render('index');
@@ -18,7 +19,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res){
-  var state = require('../state.json');
+  var state = require(statePath);
   var showIndex = true;
   if(state.state == 'initial') {
     if (req.body.rootpassword != ""
@@ -32,7 +33,7 @@ router.post('/', function(req, res){
 
         state.state = 'clone';
 
-        fs.writeFile('../state.json', JSON.stringify(state), {flag: 'w'}, function (err) {
+        fs.writeFile(statePath, JSON.stringify(state), {flag: 'w'}, function (err) {
           if (err) return console.log(err);
         });
 
@@ -94,7 +95,7 @@ router.post('/', function(req, res){
 
               fs.writeFile(os.homedir()+"/.CryptoBullion/CryptoBullion.conf", cryptoBullionConf, {flag: 'w'}, function (err) {
                 state.state = 'bootstrap';
-                fs.writeFile('../state.json', JSON.stringify(state), {flag: 'w'}, function (err) {
+                fs.writeFile(statePath, JSON.stringify(state), {flag: 'w'}, function (err) {
                   if (err) return console.log(err);
                 });
 
@@ -115,7 +116,7 @@ router.post('/', function(req, res){
                     extract("bootstrap.zip", {dir: os.homedir()+"/.CryptoBullion"}, function (err) {
                       child_process.exec("sudo mv "+walletPath+"/startup.sh "+os.homedir()+"/startup.sh && sudo chmod +x "+os.homedir()+"/startup.sh", function (error, stdout, stderr) {
                         state.state = 'done';
-                        fs.writeFile('../state.json', JSON.stringify(state), {flag: 'w'}, function (err) {
+                        fs.writeFile(statePath, JSON.stringify(state), {flag: 'w'}, function (err) {
                           if (err) return console.log(err);
                         });
 

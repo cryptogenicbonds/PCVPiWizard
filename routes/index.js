@@ -61,7 +61,7 @@ router.post('/', function(req, res){
             var daemonStatus = {};
             var book = {};
 
-            daemonStatus.status = 'update';
+            daemonStatus.daemon = 'update';
             users[req.body.username] = {
               'password': req.body.password,
               'id': 1

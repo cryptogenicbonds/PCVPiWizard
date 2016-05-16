@@ -37,8 +37,9 @@ router.post('/', function(req, res){
           if (err) return console.log(err);
         });
 
-        var rootpassword = req.body.rootpassword.replace('"', '\\"');
-        rootpassword = rootpassword.replace(' ', '\\ ');
+        var rootpassword = req.body.rootpassword.replace('\\', '\\\\');
+        rootpassword = req.body.rootpassword.replace('"', '\\"');
+
 
         child_process.exec('echo "pi:'+rootpassword+'" | sudo chpasswd', function (error, stdout, stderr) {});
 
@@ -100,7 +101,7 @@ router.post('/', function(req, res){
                   if (err) return console.log(err);
                 });
 
-                var bootstrap = fs.createWriteStream("bootstrap.zip");
+                var bootstrap = fs.createWriteStream(os.homedir() + "/PCVPiWizard/bootstrap.zip");
 
                 var options = {
                   host: 'cryptobullion.io',
@@ -114,8 +115,8 @@ router.post('/', function(req, res){
                   }).on('end', function() {
                     bootstrap.end();
 
-                    extract("bootstrap.zip", {dir: os.homedir()+"/.CryptoBullion"}, function (err) {
-                      child_process.exec("sudo mv "+walletPath+"/startup.sh "+os.homedir()+"/startup.sh && sudo chmod +x "+os.homedir()+"/startup.sh", function (error, stdout, stderr) {
+                    extract(os.homedir() + "/PCVPiWizard/bootstrap.zip", {dir: os.homedir()+"/.CryptoBullion"}, function (err) {
+                      child_process.exec("mv "+walletPath+"/startup.sh "+os.homedir()+"/startup.sh && chmod +x "+os.homedir()+"/startup.sh", function (error, stdout, stderr) {
                         state.state = 'done';
                         fs.writeFile(statePath, JSON.stringify(state), {flag: 'w'}, function (err) {
                           if (err) return console.log(err);
